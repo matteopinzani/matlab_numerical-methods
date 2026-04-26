@@ -21,6 +21,7 @@ This project explores the mathematical explores the mathematical construction, s
 * `activity_2_matrix_implementation/`: An automated MATLAB function (`bezier_matrix.m`) designed to accept an n x 8 matrix, rendering the 21-piece lower-case letter 'f' in the Times-Roman font.
 * `activity_3_pdf_stream_implementation/`: Manual vector-coding of the PDF stream. The letter 'f' is constructed using the `m` (moveto) command and consecutive `c` (curveto) commands for the splines directly within the file's binary stream.
 * `activity_4_pdf_transformations_implementation/`: Advanced manipulation of the PDF coordinate system. This activity utilizes the `cm` command to apply linear affine transformations (scaling, translating, skewing) and implements RGB color styling (`RG`, `w`, `rg`).
+* `activity_5_font_bezier`: Extraction of Bézier curve data from modern web fonts. This folder includes an SVG file containing the path data for the letter 'R' and the corresponding PDF output (`letterR.pdf`).
 * `activity_6_creative_bezier_design/`: The design and implementation of an original typographical character. Includes the mandatory initial hand-drawn sketch on a coordinate grid, the theoretical calculation of control points, the numerical matrix, and the final PDF render.
 
 ### Project 2: ... (todo)
