@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+
+\newtheorem*{theorem210}{Theorem 2.10}
+\newtheorem*{theoremA7}{Theorem A.7}
+
+\begin{document}
+
+\begin{theorem210}
+If the $n \times n$ matrix $A$ is strictly diagonally dominant, then:
+\begin{enumerate}
+    \item $A$ is a non-singular matrix.
+    \item For every vector $b$ and every starting guess, the Jacobi method applied to $Ax = b$ converges to the (unique) solution.
+\end{enumerate}
+\end{theorem210}
+
+\begin{proof}
+Let $A = D + L + U$, where $D$ is the diagonal part of $A$, and $L$ and $U$ are the strictly lower and upper triangular parts, respectively. Let $R = L + U$ denote the non-diagonal part of the matrix $A$. Note that the diagonal entries of $R$ are zero.
+
+To guarantee the convergence of the Jacobi method, we must show that the spectral radius of the iteration matrix is less than one, that, is $\rho(D^{-1}R) < 1$. In other words, we have to show that every eigenvalue of this matrix has magnitude strictly less than one.
+
+Let $\lambda$ be an arbitrary eigenvalue of $D^{-1}R$ with corresponding eigenvector $v$. By definition, we have:
+\[
+D^{-1}Rv = \lambda v \implies Rv = \lambda Dv
+\]
+
+Choose the eigenvector $v$ such that its infinity norm is 1, i.e., $\|v\|_\infty = 1$. This means there exists an index $m$ ($1 \le m \le n$) such that the component $|v_m| = 1$, and for all other components, $|v_j| \le 1$.
+
+Considering the $m$-th component of the vector equation $Rv = \lambda Dv$, and recalling that $r_{mm} = 0$ (because, as already stated, all diagonal values of $R$ are zero), we get:
+\[
+\sum_{\substack{j \neq m}}^{n} r_{mj}v_j = \lambda d_{mm}v_m
+\]
+
+Taking the absolute value of both sides and substituting $|v_m| = 1$, produces:
+\[
+|\lambda| |d_{mm}| = \left| \sum_{\substack{j \neq m}}^{n} r_{mj}v_j \right|\]
+
+Applying the triangle inequality, we get:
+\[
+|\lambda| |d_{mm}| \le \sum_{\substack{j \neq m}}^{n} |r_{mj}| |v_j|
+\]
+
+Since $|v_j| \le 1$ for all $j$, we can bound the right side:
+\[
+|\lambda| |d_{mm}| \le \sum_{\substack{j \neq m}}^{n} |r_{mj}|
+\]
+
+By the hypothesis that $A$ is strictly diagonally dominant, the absolute value of the diagonal entry strictly dominates the sum of the absolute values of the off-diagonal entries in its row:
+\[
+\sum_{\substack{j \neq i}}^{n} |a_{ij}| < |a_{ii}| \implies \sum_{\substack{j \neq m}}^{n} |r_{mj}| < |d_{mm}|
+\]
+
+Combining these inequalities gives:
+\[
+|\lambda| |d_{mm}| < |d_{mm}|
+\]
+
+Since $A$ is strictly diagonally dominant, its diagonal elements cannot be zero, so $|d_{mm}| > 0$. Dividing both sides by $|d_{mm}|$ yields:
+\[
+|\lambda| < 1
+\]
+
+Because $\lambda$ was an arbitrary eigenvalue, it follows that $\rho(D^{-1}R) < 1$: this consequence is due to the fact that we have proven that all eigenvalues are less than one. We now rely on the general theorem on iterative methods:
+
+\begin{theoremA7}
+If the $n \times n$ matrix $M$ has spectral radius $\rho (M) < 1$, and $c$ is arbitrary, then, for any vector $x_0$, the iteration $x_{k+1} = Mx_k + c$ converges. In fact, there exists a unique $x_*$ such that $\lim_{k \to \infty} x_k = x_*$ and $x_* = Mx_* + c$.
+\end{theoremA7}
+
+Therefore, let $M = -D^{-1}(L + U)$ and $c = D^{-1}b$, we have:
+\[
+x_{k+1} = Mx_* + c = -D^{-1}(L + U) + D^{-1}b
+\]
+
+This guarantees that the Jacobi method converges for any starting guess $x_0$ and any vector $b$.
+
+Finally, since the linear system $Ax = b$ is guaranteed to have a unique solution for every possible $b$, fundamental linear algebra affirms that the matrix $A$ must be invertible. Therefore, $A$ is a non-singular matrix, completing the proof.
+\end{proof}
+
+\end{document}
