@@ -9,8 +9,8 @@ The assignmnets, theoretical foundations, and mathematical algorithms implemente
 
 ## 📁 Repository Structure
 The repository is divided into main directories for each project to keep the source code, numerical data, and visual outputs organized:
-* `projects/1_bezier_curves`: Contains the implementation for drawing and manipulating cubic Bézier splines.
-* `projects/2_...`: todo
+* `projects/1-bezier_curves`: Contains the implementation for drawing and manipulating cubic Bézier splines.
+* `projects/2-eigenvalues_iteration_pagerank`: Contains theoretical mathematical proof, Power Iteration implementation, and PageRank network analysis.
 * `projects/3_...`: todo
 
 ## 🚀 Projects Overview
@@ -24,10 +24,15 @@ This project explores the mathematical explores the mathematical construction, s
 * `activity_5_font_bezier`: Extraction of Bézier curve data from modern web fonts. This folder includes an SVG file containing the path data for the letter 'R' and the corresponding PDF output (`letterR.pdf`).
 * `activity_6_creative_bezier_design/`: The design and implementation of an original typographical character. Includes the mandatory initial hand-drawn sketch on a coordinate grid, the theoretical calculation of control points, the numerical matrix, and the final PDF render.
 
-### Project 2: ... (todo)
+### Project 2: Eigenvalues, Iteration, and PageRank
+This project consists of repeated matrix multiplication through eigenvalues.
+* `part_1_proof_thm/`: A theoretical presentation proving Theorem 2.10 from Sauer's *Numerical Analysis*. The proof demonstrates that strict diagonal dominance in a matrix implies the convergence of the Jacobi iterative method.
+* `part_2_power_iteration_dominant_eigenpair/`: A Matlab implementation of the Power Iteration method to approximate the dominant eigenvalue and corresponding eigenvector of a square matrix. The scripts evaluates a $3 x 3$ test matrix, compares the approximated results with MATLAB's exact `eig` function, and empirically investigates the convergence speed against the theoretical rate $S = |\lambda_2/\lambda_1|$.
+* `part_3_pagerank_wikipedia/`: Application of the power iteration code to compute the PageRank vector for a supplied network of Wikipedia pages, using a generated Google matrix.
 
 ### Project 3: ... (todo)
 
 ## 🛠️ Technologies & Tools
 * **MATLAB**: Used for mathematical simulations, interactive coordinate mapping, and numerical rendering.
 * **PDF Stream Commands**: Direct text-editor manipulation of PDF object streams (`m`, `c`, `cm`, `S`, `b`) for low-level vector graphics generation.
+* **LaTeX / Markdown**: Used for typesetting mathematical theorems and documenting project functionality.
