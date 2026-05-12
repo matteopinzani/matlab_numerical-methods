@@ -68,7 +68,7 @@ If the $n \times n$ matrix $M$ has spectral radius $\rho (M) < 1$, and $c$ is ar
 
 Therefore, let $M = -D^{-1}(L + U)$ and $c = D^{-1}b$, we have:
 \[
-x_{k+1} = Mx_* + c = -D^{-1}(L + U) + D^{-1}b
+x_{k+1} = Mx_k + c = -D^{-1}(L + U)x_k + D^{-1}b
 \]
 
 This guarantees that the Jacobi method converges for any starting guess $x_0$ and any vector $b$.
