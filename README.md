@@ -11,7 +11,7 @@ The assignmnets, theoretical foundations, and mathematical algorithms implemente
 The repository is divided into main directories for each project to keep the source code, numerical data, and visual outputs organized:
 * `projects/1-bezier_curves`: Contains the implementation for drawing and manipulating cubic Bézier splines.
 * `projects/2-eigenvalues_iteration_pagerank`: Contains theoretical mathematical proof, Power Iteration implementation, and PageRank network analysis.
-* `projects/3_...`: Contains the implementation of numerical integration and root-finding algorithm to simulate constant and variable-speed motion along parametric curves.
+* `projects/3-adaptive_quadrature_motion_control`: Contains the implementation of numerical integration and root-finding algorithm to simulate constant and variable-speed motion along parametric curves.
 
 ## 🚀 Projects Overview
 
@@ -34,8 +34,8 @@ This project consists of repeated matrix multiplication through eigenvalues.
 This project applies numerical integration and root-finding to a classic problem in computer animation: moving a marker along a parametric curve at a prescribed speed. The project relies on approximating arc-length integrals and solving nonlinear equations to control motion dynamics.
 * `part_1_validating_adaptive_quadrature/`: Validation of an adaptive quadrature routine (`adapquad.m`). The algorithm numerically computes the arr-length of a circle, comparing the apporximated output against the known closed-form analytical length to verify accuracy and error tolerances.
 * `part_2_equal_arclength_partition_newton_method/`: Implementation of Netwon's method to equipartition a custom parametric curve (a cubic Bézier spline). The script solves for parameter values $t^*(s)$ that divide the curve into $n$ segments of exactly equal arc-length, relying heavily on the Fundamental Theorem of Calculus for the derivative formulation.
-* `part_3_...`: todo
-* `part_4_...`: todo
+* `part_3_constant_speed/`: Application of the partition points generated in Part 2 to animate a marker traveling along the parametric curve at a strict, uniform constant speed.
+* `part_4_variable_speed_via_animation/`: Advanced animation kinematics. A custom progress curve $C(s)$ (where $s \in [0,1]$) is introduced to map normalized time to the fraction of arc-length traversed, allowing the marker to dynamically accelerate and decelerate along the path.
 
 ## 🛠️ Technologies & Tools
 * **MATLAB**: Used for mathematical simulations, interactive coordinate mapping, and numerical rendering.
