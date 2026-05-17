@@ -1,0 +1,152 @@
+%% Part 4 - Variable-Speed Animation via a Progress Curve
+% =========================================================
+% At normalised time s in [0,1], the fraction of arc length
+% traversed equals C(s) instead of s.
+% Compared to Part 3, only ONE line changes in the Newton loop.
+%
+% Progress curve used: C(s) = s^5
+%   - Very flat near s=0  → marker barely moves at the start
+%   - Very steep near s=1 → marker rushes to the end
+%   This is a strong ease-in effect, much more visible than
+%   the smooth-step used in the milder version.
+%
+% REQUIRES: adapquad.m in the same folder / on the path.
+% =========================================================
+clear; clc; close all;
+
+% ── 1. Curve definition (identical to Part 3) ────────────
+H = [85 565 95 575 120 575 130 570;
+    130 570 140 560 180 570 190 580;
+    190 580 195 555 210 425 215 410;
+    215 410 225 370 230 240 225 220;
+    225 220 215 180 170 130 150 165;
+    150 165 140 180 140 235 160 260;
+    160 260 180 280 255 330 280 340;
+    280 340 320 360 435 475 450 500;
+    450 500 460 530 465 580 460 590;
+    460 590 445 600 410 560 400 520;
+    400 520 390 485 385 280 390 210;
+    390 210 395 185 460 190 480 220];
+
+row = 10;
+P0 = H(row, 1:2); P1 = H(row, 3:4);
+P2 = H(row, 5:6); P3 = H(row, 7:8);
+
+x = @(t) (1-t).^3*P0(1) + 3*(1-t).^2.*t*P1(1) + 3*(1-t).*t.^2*P2(1) + t.^3*P3(1);
+y = @(t) (1-t).^3*P0(2) + 3*(1-t).^2.*t*P1(2) + 3*(1-t).*t.^2*P2(2) + t.^3*P3(2);
+
+x_prime = @(t) 3*(1-t).^2*(P1(1)-P0(1)) + 6*(1-t).*t*(P2(1)-P1(1)) + 3*t.^2*(P3(1)-P2(1));
+y_prime = @(t) 3*(1-t).^2*(P1(2)-P0(2)) + 6*(1-t).*t*(P2(2)-P1(2)) + 3*t.^2*(P3(2)-P2(2));
+
+arc_len_int = @(t) sqrt(x_prime(t).^2 + y_prime(t).^2);
+
+tol   = 1e-8;
+L_tot = adapquad(arc_len_int, 0, 1, tol);
+fprintf('Total arc length: %.6f\n', L_tot);
+
+% ── 2. Progress curve C : [0,1] → [0,1] ─────────────────
+% C(s) = s^5
+%   Slope at s=0 is 0   → near-frozen start
+%   Slope at s=1 is 5   → fast finish
+% The gap between C(s) and the diagonal is large and obvious,
+% making the speed difference very easy to see in the animation.
+
+C      = @(s) s.^5;
+C_name = 'C(s) = s^5  (strong ease-in)';
+
+% ── 3. Compute N+1 positions using C(s) ──────────────────
+% KEY DIFFERENCE FROM PART 3:
+%   Part 3: Newton solves for t*(s)       uniform arc-length target
+%   Part 4: Newton solves for t*(C(s))    warped arc-length target
+%
+% Every other line in this loop is word-for-word identical to Part 3.
+
+N        = 150;
+tol_newt = 0.5e-8;
+s_vals   = linspace(0, 1, N+1);
+cs_vals  = C(s_vals);              % apply progress curve
+t_stars  = zeros(1, N+1);
+
+fprintf('Computing %d positions via Newton (with progress curve)...\n', N+1);
+for i = 1:length(s_vals)
+    target = cs_vals(i);           % <-- ONLY change vs Part 3
+    t_curr = target;               % initial guess
+    err_newton = inf;
+
+    while err_newton > tol_newt
+        if t_curr <= 0
+            f_val = -target * L_tot;
+        else
+            f_val = adapquad(arc_len_int, 0, t_curr, tol) - target * L_tot;
+        end
+        f_prime    = arc_len_int(t_curr);
+        t_new      = t_curr - f_val / f_prime;
+        t_new      = max(0, min(1, t_new));
+        err_newton = abs(t_new - t_curr);
+        t_curr     = t_new;
+    end
+    t_stars(i) = t_curr;
+end
+
+px = x(t_stars);
+py = y(t_stars);
+
+% ── 4. Figure: progress curve (left) + animation (right) ─
+fig = figure('Name', 'Part 4 - Variable Speed', 'Color', 'w');
+
+% Left panel: progress curve vs constant-speed diagonal
+ax_prog = subplot(1, 2, 1);
+s_plot  = linspace(0, 1, 300);
+plot(s_plot, C(s_plot), 'm-', 'LineWidth', 2.5); hold on;
+plot([0 1], [0 1], 'k--', 'LineWidth', 1.5);
+% Shade the gap so the difference is visually obvious
+fill([s_plot, fliplr(s_plot)], ...
+     [C(s_plot), fliplr(s_plot)], ...
+     'm', 'FaceAlpha', 0.10, 'EdgeColor', 'none');
+xlabel('Normalised time  s');
+ylabel('Arc-length fraction  C(s)');
+title('Progress Curve');
+legend(C_name, 'Constant speed (Part 3)', ...
+       'Location', 'NW', 'FontSize', 7);
+grid on; axis equal; xlim([0 1]); ylim([0 1]);
+
+% Dot that walks along C(s) in sync with the animation
+h_prog = plot(ax_prog, s_vals(1), cs_vals(1), 'ko', ...
+              'MarkerSize', 8, 'MarkerFaceColor', 'k');
+
+% Right panel: Bezier curve + animated marker
+ax_anim = subplot(1, 2, 2);
+t_plot  = linspace(0, 1, 500);
+plot(ax_anim, x(t_plot), y(t_plot), 'b-', 'LineWidth', 2, ...
+     'DisplayName', 'Bezier curve');
+hold(ax_anim, 'on'); grid(ax_anim, 'on'); axis(ax_anim, 'equal');
+xlabel(ax_anim, 'x'); ylabel(ax_anim, 'y');
+title(ax_anim, 'Part 4: Variable-Speed Animation');
+legend(ax_anim, 'Location', 'best');
+
+h_marker = plot(ax_anim, px(1), py(1), 'mo', ...
+                'MarkerSize', 12, 'MarkerFaceColor', 'm', ...
+                'DisplayName', 'Marker');
+h_trail  = plot(ax_anim, px(1), py(1), 'm-', 'LineWidth', 1.5, ...
+                'HandleVisibility', 'off');
+
+% ── 5. Animate ───────────────────────────────────────────
+pause(1);
+for k = 2:N+1
+    set(h_marker, 'XData', px(k),     'YData', py(k));
+    set(h_trail,  'XData', px(1:k),   'YData', py(1:k));
+    set(h_prog,   'XData', s_vals(k), 'YData', cs_vals(k));
+    drawnow;
+    pause(0.03);
+end
+
+fprintf('Done.\n');
+
+% ── 6. Summary of what changed vs Part 3 ─────────────────
+fprintf('\n--- What changed from Part 3? ---\n');
+fprintf('Part 3: target arc-length fraction = s        (uniform in time)\n');
+fprintf('Part 4: target arc-length fraction = C(s) = s^5\n');
+fprintf('The Newton solver, adapquad calls, and animation loop are unchanged.\n');
+fprintf('C(s) = s^5 has a very flat slope near s=0 and a steep slope near\n');
+fprintf('s=1, so the marker barely moves for the first half of the animation\n');
+fprintf('then accelerates sharply to finish — a strong ease-in effect.\n');
