@@ -11,7 +11,7 @@ The assignmnets, theoretical foundations, and mathematical algorithms implemente
 The repository is divided into main directories for each project to keep the source code, numerical data, and visual outputs organized:
 * `projects/1-bezier_curves`: Contains the implementation for drawing and manipulating cubic Bézier splines.
 * `projects/2-eigenvalues_iteration_pagerank`: Contains theoretical mathematical proof, Power Iteration implementation, and PageRank network analysis.
-* `projects/3_...`: todo
+* `projects/3_...`: Contains the implementation of numerical integration and root-finding algorithm to simulate constant and variable-speed motion along parametric curves.
 
 ## 🚀 Projects Overview
 
@@ -30,7 +30,12 @@ This project consists of repeated matrix multiplication through eigenvalues.
 * `part_2_power_iteration_dominant_eigenpair/`: A Matlab implementation of the Power Iteration method to approximate the dominant eigenvalue and corresponding eigenvector of a square matrix. The scripts evaluates a $3 x 3$ test matrix, compares the approximated results with MATLAB's exact `eig` function, and empirically investigates the convergence speed against the theoretical rate $S = |\lambda_2/\lambda_1|$.
 * `part_3_pagerank_wikipedia/`: Application of the power iteration code to compute the PageRank vector for a supplied network of Wikipedia pages, using a generated Google matrix.
 
-### Project 3: ... (todo)
+### Project 3: Adaptive Quadrature and Motion Control in Animation
+This project applies numerical integration and root-finding to a classic problem in computer animation: moving a marker along a parametric curve at a prescribed speed. The project relies on approximating arc-length integrals and solving nonlinear equations to control motion dynamics.
+* `part_1_validating_adaptive_quadrature/`: Validation of an adaptive quadrature routine (`adapquad.m`). The algorithm numerically computes the arr-length of a circle, comparing the apporximated output against the known closed-form analytical length to verify accuracy and error tolerances.
+* `part_2_equal_arclength_partition_newton_method/`: Implementation of Netwon's method to equipartition a custom parametric curve (a cubic Bézier spline). The script solves for parameter values $t^*(s)$ that divide the curve into $n$ segments of exactly equal arc-length, relying heavily on the Fundamental Theorem of Calculus for the derivative formulation.
+* `part_3_...`: todo
+* `part_4_...`: todo
 
 ## 🛠️ Technologies & Tools
 * **MATLAB**: Used for mathematical simulations, interactive coordinate mapping, and numerical rendering.
